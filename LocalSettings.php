@@ -141,9 +141,35 @@ wfLoadSkin( 'Vector' );
 #---------------Extension LDAPProvider---------------
 #provides classes and configuration to query data from LDAP resources
 wfLoadExtension( 'LDAPProvider' );
-$ldapJsonFile = "$IP/extensions/LDAPProvider/docs/ldapprovider.json";
-$LDAPProviderDomainConfigProvider = "\\MediaWiki\\Extension\\LDAPProvider\\DomainConfigProvider\\LocalJSONFile::newInstance";
-$LDAPProviderDomainConfigs = $ldapJsonFile;
+//$ldapJsonFile = "$IP/extensions/LDAPProvider/docs/ldapprovider.json";
+//$LDAPProviderDomainConfigProvider = "\\MediaWiki\\Extension\\LDAPProvider\\DomainConfigProvider\\LocalJSONFile::newInstance";
+//$LDAPProviderDomainConfigs = $ldapJsonFile;
+
+$LDAPProviderDomainConfigProvider = function () {
+    $config = [
+        'LDAP' => [
+            'connection' => [
+                "server" => "ldap.forumsys.com",
+                "user" => "cn=read-only-admin,dc=example,dc=com",
+                "pass" => 'password',
+                "options" => [
+                    "LDAP_OPT_DEREF" => 1
+                ],
+                "basedn" => "dc=example,dc=com",
+                "groupbasedn" => "dc=example,dc=com",
+                "userbasedn" => "dc=example,dc=com",
+                "searchattribute" => "uid",
+                "searchstring" => "uid=USER-NAME,dc=example,dc=com",
+                "usernameattribute" => "uid",
+                "realnameattribute" => "cn",
+                "emailattribute" => "mail",
+            ],
+        ]
+    ];
+
+    return new \MediaWiki\Extension\LDAPProvider\DomainConfigProvider\InlinePHPArray( $config );
+};
+
 $LDAPProviderDefaultDomain="LDAP";
 
 #---------------Extension PluggableAuth---------------
@@ -151,9 +177,8 @@ $LDAPProviderDefaultDomain="LDAP";
 wfLoadExtension( 'PluggableAuth' );
 $wgPluggableAuth_EnableAutoLogin = false; #if true, disables the logout option
 $wgPluggableAuth_EnableLocalLogin = false;
-$wgPluggableAuth_ButtonLabel  = "Login...";
+$wgPluggableAuth_ButtonLabel  = "Log In";
 
 #---------------Extension LDAPAuthentication2---------------
 wfLoadExtension( 'LDAPAuthentication2' );
-$LDAPAuthentication2AllowLocalLogin = false;
-
+$LDAPAuthentication2AllowLocalLogin = true;

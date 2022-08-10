@@ -15,8 +15,6 @@ services:
     build:
       context: ./docker/php-fpm
     container_name: ${PROJECT_NAME}-php-fpm
-    volumes:
-      - ./docker/config/LocalSettings.php:/var/www/html/LocalSettings.php
     depends_on:
       - mysql
 

@@ -12,14 +12,14 @@
 
 # Protect against web entry
 if ( !defined( 'MEDIAWIKI' ) ) {
-	exit;
+    exit;
 }
 
 
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
 
-$wgSitename = "Test-Wiki";
+$wgSitename = "TestWiki";
 
 ## The URL base path to the directory containing the wiki;
 ## defaults for all runtime URL paths are based off of this.
@@ -101,14 +101,14 @@ $wgShellLocale = "C.UTF-8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "ru";
 
-$wgSecretKey = "4d6f93293c3bd042134c047b669a29de8c3c4ef5fbf6f4773463cacd2dc97acf";
+$wgSecretKey = "d6e1345dacf6afcb3a364849bf34a5a2fd64f4864701466147a5f3e34fb5d46b";
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "c1e452f517231a35";
+$wgUpgradeKey = "4ed8e2f582bebe48";
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -134,4 +134,26 @@ wfLoadSkin( 'Vector' );
 
 # End of automatically generated settings.
 # Add more configuration options below.
+
+
+#---------------LDAP---------------
+
+#---------------Extension LDAPProvider---------------
+#provides classes and configuration to query data from LDAP resources
+wfLoadExtension( 'LDAPProvider' );
+$ldapJsonFile = "$IP/extensions/LDAPProvider/docs/ldapprovider.json";
+$LDAPProviderDomainConfigProvider = "\\MediaWiki\\Extension\\LDAPProvider\\DomainConfigProvider\\LocalJSONFile::newInstance";
+$LDAPProviderDomainConfigs = $ldapJsonFile;
+$LDAPProviderDefaultDomain="LDAP";
+
+#---------------Extension PluggableAuth---------------
+#provides a framework for creating and using authentication and authorization extensions
+wfLoadExtension( 'PluggableAuth' );
+$wgPluggableAuth_EnableAutoLogin = false; #if true, disables the logout option
+$wgPluggableAuth_EnableLocalLogin = false;
+$wgPluggableAuth_ButtonLabel  = "Login...";
+
+#---------------Extension LDAPAuthentication2---------------
+wfLoadExtension( 'LDAPAuthentication2' );
+$LDAPAuthentication2AllowLocalLogin = false;
 

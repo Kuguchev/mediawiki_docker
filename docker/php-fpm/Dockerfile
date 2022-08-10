@@ -6,6 +6,7 @@ RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
 		git \
+        nano \
 		librsvg2-bin \
 		imagemagick \
 		# Required for SyntaxHighlighting
@@ -98,5 +99,29 @@ RUN set -eux; \
 	\
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $fetchDeps; \
 	rm -rf /var/lib/apt/lists/*
+
+# LDAP library
+RUN \
+  apt-get update && \
+  apt-get install libldap2-dev wget -y && \
+  rm -rf /var/lib/apt/lists/* && \
+  docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
+  docker-php-ext-install ldap
+
+# MediaWiki LDAP extensions setup
+
+#RUN git clone -b REL1_35 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LdapAuthentication.git /var/www/html/extensions/LdapAuthentication
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LDAPAuthorization.git /var/www/html/extensions/LDAPAuthorization
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LDAPAuthentication2.git /var/www/html/extensions/LDAPAuthentication2
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LDAPGroups.git /var/www/html/extensions/LDAPGroups
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LDAPProvider.git /var/www/html/extensions/LDAPProvider
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-LDAPUserInfo.git /var/www/html/extensions/LDAPUserInfo
+
+RUN git clone -b REL1_34 --depth 1 https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git /var/www/html/extensions/PluggableAuth
 
 CMD ["php-fpm"]
